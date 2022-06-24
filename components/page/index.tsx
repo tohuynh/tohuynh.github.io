@@ -1,4 +1,3 @@
-
 import Head from "next/head"
 import { ReactNode, FC } from "react"
 
