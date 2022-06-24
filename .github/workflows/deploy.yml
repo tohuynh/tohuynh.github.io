@@ -22,7 +22,7 @@ jobs:
     - name: Build static website
       run: |
         npm run build
-    - name: Deploy statoc website
+    - name: Deploy static website
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
