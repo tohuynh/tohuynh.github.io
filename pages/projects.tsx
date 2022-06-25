@@ -74,6 +74,26 @@ const Projects: NextPage = () => {
               </Typography>
             </CardContent>
           </CardActionArea>
+          <CardActions disableSpacing>
+            <IconButton
+              arial-label="Backend GitHub"
+              component="a"
+              href="https://github.com/SIGLA-GU/siglatools"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <GitHub />
+            </IconButton>
+            <IconButton
+              arial-label="Backend documentation"
+              component="a"
+              href="https://sigla-gu.github.io/siglatools/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <Article />
+            </IconButton>
+          </CardActions>
         </Card>
         <Card raised>
           <CardActionArea
