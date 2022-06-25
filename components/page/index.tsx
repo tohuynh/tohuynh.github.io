@@ -23,7 +23,7 @@ const Page: FC<PageProps> = ({ children, style }) => {
         <meta name="title" content="To Huynh" />
         <meta name="description" content="Self-taught software developer." />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         <meta charSet="UTF-8" />
 
         <meta property="og:title" content="To Huynh" />
