@@ -27,8 +27,8 @@ const navs = [
     href: "/"
   },
   {
-    label: "Work",
-    href: "/work"
+    label: "Projects",
+    href: "/projects"
   }
 ]
 
