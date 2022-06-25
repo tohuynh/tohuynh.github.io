@@ -1,4 +1,4 @@
-import { Paper, Card, CardContent, CardActions, Typography, IconButton, Link } from "@mui/material"
+import { Card, CardContent, CardActions, Typography, IconButton, Link } from "@mui/material"
 import { GitHub, Email } from "@mui/icons-material"
 import type { NextPage } from "next"
 
@@ -7,7 +7,7 @@ import Page from "../components/page"
 const Home: NextPage = () => {
   return (
     <Page style={{ paddingTop: "15vh" }}>
-      <Card>
+      <Card raised>
         <CardContent>
           <Typography variant="h4" component="h1">
             To Huynh
