@@ -24,22 +24,24 @@ function LinkTab(props: LinkTabProps) {
 const navs = [
   {
     label: "Home",
-    href: "/"
+    href: "/",
   },
   {
     label: "Projects",
-    href: "/projects"
-  }
+    href: "/projects",
+  },
 ]
 
 const Nav = () => {
   const router = useRouter()
-  const pathnameIndex = navs.findIndex(({href}) => href === router.pathname)
+  const pathnameIndex = navs.findIndex(({ href }) => href === router.pathname)
 
   return (
     <AppBar position="fixed" sx={{ top: "auto", bottom: 0 }}>
       <Tabs value={Math.max(pathnameIndex, 0)} aria-label="Navigation" centered>
-        {navs.map(({label, href}) => <LinkTab key={label} label={label} href={href}/>)}
+        {navs.map(({ label, href }) => (
+          <LinkTab key={label} label={label} href={href} />
+        ))}
       </Tabs>
     </AppBar>
   )
