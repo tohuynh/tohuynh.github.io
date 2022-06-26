@@ -1,13 +1,9 @@
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material"
+import { ThemeProvider, CssBaseline } from "@mui/material"
 import type { AppProps } from "next/app"
 import Head from "next/head"
 import Script from "next/script"
 
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-})
+import { darkTheme } from "../styles/theme"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
