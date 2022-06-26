@@ -107,11 +107,8 @@ const Projects: NextPage = () => {
                 Anno<abbr>REP</abbr>
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                An open-source, web-based tool that helps facilitate{" "}
-                <Link target="_blank" rel="noreferrer noopener" href="https://qdr.syr.edu/ati">
-                  Annotation for Transprent Inquiry
-                </Link>{" "}
-                and other annotation-based workflows.
+                An open-source, web-based tool that helps facilitate Annotation for Transparent
+                Inquiry and other annotation-based workflows.
               </Typography>
             </CardContent>
           </CardActionArea>
