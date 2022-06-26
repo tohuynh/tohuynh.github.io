@@ -3,6 +3,8 @@ import Head from "next/head"
 import { ReactNode, FC, CSSProperties } from "react"
 
 import Nav from "../nav"
+import { darkTheme } from "../../styles/theme"
+
 type PageProps = {
   children: ReactNode
   style?: CSSProperties
@@ -33,7 +35,7 @@ const Page: FC<PageProps> = ({ children, style }) => {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <Paper
-        sx={{ minHeight: "100vh", width: "100%", paddingBottom: "50px" }}
+        sx={{ minHeight: "100vh", width: "100%", paddingBottom: darkTheme.spacing(8) }}
         square={true}
         component="main"
       >

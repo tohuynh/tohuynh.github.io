@@ -11,11 +11,12 @@ import { GitHub, Article } from "@mui/icons-material"
 import type { NextPage } from "next"
 
 import Page from "../components/page"
+import { darkTheme } from "../styles/theme"
 
 const Projects: NextPage = () => {
   return (
     <Page style={{ paddingTop: "5vh" }}>
-      <Typography variant="h4" component="h1" sx={{ padding: "1rem" }}>
+      <Typography variant="h4" component="h1" sx={{ padding: darkTheme.spacing(2) }}>
         Projects
       </Typography>
       <Stack spacing={{ xs: 2, sm: 3, md: 8 }}>
