@@ -1,15 +1,8 @@
-import { Container, ThemeProvider, createTheme, Paper } from "@mui/material"
+import { Container, Paper } from "@mui/material"
 import Head from "next/head"
 import { ReactNode, FC, CSSProperties } from "react"
 
 import Nav from "../nav"
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-})
-
 type PageProps = {
   children: ReactNode
   style?: CSSProperties
@@ -22,9 +15,6 @@ const Page: FC<PageProps> = ({ children, style }) => {
         <title>To Huynh</title>
         <meta name="title" content="To Huynh" />
         <meta name="description" content="Self-taught software developer." />
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        <meta charSet="UTF-8" />
 
         <meta property="og:title" content="To Huynh" />
         <meta property="og:description" content="Self-taught software developer." />
@@ -36,16 +26,16 @@ const Page: FC<PageProps> = ({ children, style }) => {
         <meta name="twitter:url" content="https://tohuynh.github.io" />
         <meta name="twitter:card" content="summary" />
       </Head>
-      <ThemeProvider theme={darkTheme}>
-        <Paper sx={{ minHeight: "100vh", width: "100%", paddingBottom: "50px" }} square={true}>
-          <main>
-            <Container maxWidth="sm" sx={style}>
-              {children}
-            </Container>
-          </main>
-          <Nav />
-        </Paper>
-      </ThemeProvider>
+      <Paper
+        sx={{ minHeight: "100vh", width: "100%", paddingBottom: "50px" }}
+        square={true}
+        component="main"
+      >
+        <Container maxWidth="sm" sx={style}>
+          {children}
+        </Container>
+      </Paper>
+      <Nav />
     </>
   )
 }

@@ -1,7 +1,13 @@
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material"
 import type { AppProps } from "next/app"
+import Head from "next/head"
 import Script from "next/script"
 
-import "../styles/globals.css"
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -20,7 +26,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           });
         `}
       </Script>
-      <Component {...pageProps} />
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
+        <meta charSet="UTF-8" />
+      </Head>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   )
 }
