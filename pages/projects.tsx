@@ -16,10 +16,10 @@ import { darkTheme } from "../styles/theme"
 const Projects: NextPage = () => {
   return (
     <Page style={{ paddingTop: "5vh" }}>
-      <Typography variant="h4" component="h1" sx={{ padding: darkTheme.spacing(2) }}>
+      <Typography variant="h4" component="h1" sx={{ padding: darkTheme.spacing(2) }} gutterBottom>
         Projects
       </Typography>
-      <Stack spacing={{ xs: 2, sm: 3, md: 8 }}>
+      <Stack spacing={{ xs: 2, sm: 3, md: 4 }}>
         <Card raised>
           <CardActionArea
             component="a"
