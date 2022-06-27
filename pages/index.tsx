@@ -16,7 +16,8 @@ const Home: NextPage = () => {
             Self-taught software developer with over 2 years of experience in full-stack web
             development.
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ marginTop: "1rem" }}>
+          <br />
+          <Typography variant="body1" color="text.secondary">
             Currently a contributor at{" "}
             <Link target="_blank" rel="noreferrer noopener" href="https://councildataproject.org">
               Council Data Project
