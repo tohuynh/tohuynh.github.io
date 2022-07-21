@@ -28,15 +28,18 @@ type Project = {
   documentation: Link
 }
 
-const ProjectCard: React.FC<Project> = ({ name, label, desc, url, tech, gitHub, documentation }) => {
+const ProjectCard: React.FC<Project> = ({
+  name,
+  label,
+  desc,
+  url,
+  tech,
+  gitHub,
+  documentation,
+}) => {
   return (
     <Card raised>
-      <CardActionArea
-        component="a"
-        target="_blank"
-        rel="noreferrer noopener"
-        href={url}
-      >
+      <CardActionArea component="a" target="_blank" rel="noreferrer noopener" href={url}>
         <CardContent>
           <Typography variant="h6" component="h2">
             {label || name}
@@ -44,12 +47,32 @@ const ProjectCard: React.FC<Project> = ({ name, label, desc, url, tech, gitHub, 
           <Typography variant="body2" color="text.secondary">
             {desc}
           </Typography>
-          <Stack component="ul" direction="row" spacing={0} sx={{ flexWrap: "wrap", listStyle: "none", gap: darkTheme.spacing(0.5), padding: 0, marginBottom: 0 }}>
-            {tech.map(tech => <li key={tech}><Chip size="small" label={tech} /></li>)}
-          </Stack>
-          <ArrowForward sx={{ position: "absolute", top: darkTheme.spacing(2), right: darkTheme.spacing(2) }} />
+
+          <ArrowForward
+            sx={{ position: "absolute", top: darkTheme.spacing(2), right: darkTheme.spacing(2) }}
+          />
         </CardContent>
       </CardActionArea>
+      <CardContent>
+        <Stack
+          component="ul"
+          direction="row"
+          spacing={0}
+          sx={{
+            flexWrap: "wrap",
+            listStyle: "none",
+            gap: darkTheme.spacing(0.5),
+            padding: 0,
+            margin: 0,
+          }}
+        >
+          {tech.map((tech) => (
+            <li key={tech}>
+              <Chip size="small" label={tech} />
+            </li>
+          ))}
+        </Stack>
+      </CardContent>
       <CardActions disableSpacing>
         <IconButton
           arial-label={gitHub.name}
@@ -72,7 +95,6 @@ const ProjectCard: React.FC<Project> = ({ name, label, desc, url, tech, gitHub, 
       </CardActions>
     </Card>
   )
-
 }
 
 export default ProjectCard
