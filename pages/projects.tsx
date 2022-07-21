@@ -13,6 +13,7 @@ const projects = [
     name: "Council Data Project",
     desc: "A set of open-source tools to improve the accessibility of local government data.",
     url: "https://councildataproject.org",
+    tech: ["Python", "Firebase", "Vite", "React", "Semantic UI React", "Emotion", "Storybook"],
     gitHub: {
       name: "cookiecutter-cdp-deployment codebase",
       url: "https://github.com/CouncilDataProject/cookiecutter-cdp-deployment"
@@ -27,6 +28,7 @@ const projects = [
     label: <><abbr>SIGLA</abbr> Database</>,
     desc: "An online multilingual database that freely provides information on legal and political institutions in Latin America.",
     url: "https://www.sigladata.org",
+    tech: ["Python", "Prefect", "MongoDB", "GitHub Actions", "TypeScript", "Express", "React", "Redux Toolkit", "Ant Design"],
     gitHub: {
       name: "AnnoREP-Frontend codebase",
       url: "https://github.com/SIGLA-GU/siglatools"
@@ -42,6 +44,7 @@ const projects = [
     desc: <>An open-source, web-based tool that helps facilitate Annotation for Transparent
       Inquiry (<abbr>ATI</abbr>) and other annotation-based workflows.</>,
     url: "https://anno-rep.org",
+    tech: ["TypeScript", "Next.js", "NextAuth.js", "React", "Carbon Design System", "Storybook", "Jest",],
     gitHub: {
       name: "siglatools codebase",
       url: "https://github.com/QualitativeDataRepository/AnnoREP-Frontend"

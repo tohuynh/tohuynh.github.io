@@ -6,6 +6,8 @@ import {
   CardActions,
   IconButton,
   CardActionArea,
+  Stack,
+  Chip,
 } from "@mui/material"
 import { GitHub, Article, ArrowForward } from "@mui/icons-material"
 
@@ -21,11 +23,12 @@ type Project = {
   label?: React.ReactNode
   desc: React.ReactNode
   url: string
+  tech: string[]
   gitHub: Link
   documentation: Link
 }
 
-const ProjectCard: React.FC<Project> = ({ name, label, desc, url, gitHub, documentation }) => {
+const ProjectCard: React.FC<Project> = ({ name, label, desc, url, tech, gitHub, documentation }) => {
   return (
     <Card raised>
       <CardActionArea
@@ -41,6 +44,9 @@ const ProjectCard: React.FC<Project> = ({ name, label, desc, url, gitHub, docume
           <Typography variant="body2" color="text.secondary">
             {desc}
           </Typography>
+          <Stack component="ul" direction="row" spacing={0} sx={{ flexWrap: "wrap", listStyle: "none", gap: darkTheme.spacing(0.5), padding: 0, marginBottom: 0 }}>
+            {tech.map(tech => <li key={tech}><Chip size="small" label={tech} /></li>)}
+          </Stack>
           <ArrowForward sx={{ position: "absolute", top: darkTheme.spacing(2), right: darkTheme.spacing(2) }} />
         </CardContent>
       </CardActionArea>
