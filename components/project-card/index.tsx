@@ -14,7 +14,7 @@ import { GitHub, Article, ArrowForward } from "@mui/icons-material"
 import { darkTheme } from "../../styles/theme"
 
 type Link = {
-  name: React.ReactNode
+  name: string
   url: string
 }
 
@@ -75,7 +75,7 @@ const ProjectCard: React.FC<Project> = ({
       </CardContent>
       <CardActions disableSpacing>
         <IconButton
-          arial-label={gitHub.name}
+          aria-label={gitHub.name}
           component="a"
           href={gitHub.url}
           target="_blank"
@@ -84,7 +84,7 @@ const ProjectCard: React.FC<Project> = ({
           <GitHub />
         </IconButton>
         <IconButton
-          arial-label={documentation.name}
+          aria-label={documentation.name}
           component="a"
           href={documentation.url}
           target="_blank"
