@@ -76,6 +76,7 @@ const ProjectCard: React.FC<Project> = ({
       <CardActions disableSpacing>
         <IconButton
           aria-label={gitHub.name}
+          title={gitHub.name}
           component="a"
           href={gitHub.url}
           target="_blank"
@@ -85,6 +86,7 @@ const ProjectCard: React.FC<Project> = ({
         </IconButton>
         <IconButton
           aria-label={documentation.name}
+          title={documentation.name}
           component="a"
           href={documentation.url}
           target="_blank"

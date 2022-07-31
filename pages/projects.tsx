@@ -10,7 +10,16 @@ const projects = [
     name: "Council Data Project",
     desc: "A set of open-source tools to improve the accessibility of local government data.",
     url: "https://councildataproject.org",
-    tech: ["Python", "Firebase", "TypeScript", "Vite", "React", "Semantic UI React", "Emotion", "Storybook"],
+    tech: [
+      "Python",
+      "Firebase",
+      "TypeScript",
+      "Vite",
+      "React",
+      "Semantic UI React",
+      "Emotion",
+      "Storybook",
+    ],
     gitHub: {
       name: "cookiecutter-cdp-deployment codebase",
       url: "https://github.com/CouncilDataProject/cookiecutter-cdp-deployment",
@@ -41,7 +50,7 @@ const projects = [
       "Ant Design",
     ],
     gitHub: {
-      name: "AnnoREP-Frontend codebase",
+      name: "siglatools codebase",
       url: "https://github.com/SIGLA-GU/siglatools",
     },
     documentation: {
@@ -73,7 +82,7 @@ const projects = [
       "Jest",
     ],
     gitHub: {
-      name: "siglatools codebase",
+      name: "AnnoREP-Frontend codebase",
       url: "https://github.com/QualitativeDataRepository/AnnoREP-Frontend",
     },
     documentation: {

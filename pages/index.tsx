@@ -28,6 +28,7 @@ const Home: NextPage = () => {
         <CardActions disableSpacing>
           <IconButton
             aria-label="GitHub"
+            title="GitHub"
             component="a"
             href="https://github.com/tohuynh"
             target="_blank"
@@ -35,7 +36,12 @@ const Home: NextPage = () => {
           >
             <GitHub />
           </IconButton>
-          <IconButton aria-label="Email" component="a" href="mailto:huynh.nto@gmail.com">
+          <IconButton
+            aria-label="Email"
+            title="Email"
+            component="a"
+            href="mailto:huynh.nto@gmail.com"
+          >
             <Email />
           </IconButton>
         </CardActions>
