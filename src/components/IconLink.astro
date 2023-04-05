@@ -1,0 +1,21 @@
+---
+interface Props {
+  href: string;
+  text: string;
+  size?: string;
+}
+
+const { href, text, size } = Astro.props;
+---
+
+<a
+  class={`hover:bg-gray-600 h-8 w-8 flex justify-center items-center rounded-full ${
+    size || "h-8 w-8"
+  }`}
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <span class="sr-only">{text}</span>
+  <slot />
+</a>

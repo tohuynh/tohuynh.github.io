@@ -1,31 +1,28 @@
 {
   "name": "tohuynh.github.io",
-  "version": "0.1.0",
-  "private": true,
+  "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build && next export",
-    "deploy": "gh-pages -d out -t true",
-    "lint": "next lint",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint --ext .js,.astro src",
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.5",
-    "next": "12.1.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@astrojs/tailwind": "^3.1.1",
+    "astro": "^2.1.9",
+    "tailwindcss": "^3.3.1"
   },
   "devDependencies": {
-    "@types/node": "18.0.0",
-    "@types/react": "18.0.14",
-    "@types/react-dom": "18.0.5",
-    "eslint": "8.18.0",
-    "eslint-config-next": "12.1.6",
-    "gh-pages": "^4.0.0",
-    "prettier": "^2.7.1",
-    "typescript": "4.7.4"
+    "@typescript-eslint/parser": "^5.57.1",
+    "eslint": "^8.37.0",
+    "eslint-plugin-astro": "^0.26.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "prettier": "^2.8.7",
+    "prettier-plugin-astro": "^0.8.0",
+    "prettier-plugin-tailwindcss": "^0.2.7"
   }
 }
