@@ -3,9 +3,10 @@ interface Props {
   href: string;
   text: string;
   size?: string;
+  isExternal?: boolean;
 }
 
-const { href, text, size } = Astro.props;
+const { href, text, size, isExternal = true } = Astro.props;
 ---
 
 <a
@@ -13,8 +14,8 @@ const { href, text, size } = Astro.props;
     size || "h-8 w-8"
   }`}
   href={href}
-  target="_blank"
-  rel="noopener noreferrer"
+  target={isExternal ? "_blank" : "_self"}
+  rel={isExternal ? "noopener noreferrer" : ""}
 >
   <span class="sr-only">{text}</span>
   <slot />

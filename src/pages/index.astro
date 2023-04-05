@@ -125,7 +125,17 @@ const projects = [
           </ul>
         </div>
         <div class="flex justify-center">
-          <IconLink href="#projects" text="Read more" size="h-10 w-10">Read more</IconLink>
+          <IconLink href="#projects" text="Read more" size="h-10 w-10" isExternal={false}>
+            <svg
+              class="h-7 w-7 fill-white"
+              focusable="false"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              data-testid="ArrowDownwardIcon"
+              aria-label="fontSize large"
+              ><path d="m20 12-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path></svg
+            >
+          </IconLink>
         </div>
       </div>
       <div id="projects">
