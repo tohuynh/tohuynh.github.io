@@ -12,13 +12,13 @@ export interface Props {
   url: string;
   techs: string[];
   gitHub: Link;
-  documentation: Link;
+  documentation?: Link;
 }
 
 const { name, desc, url, techs, gitHub, documentation } = Astro.props;
 ---
 
-<div class="flex flex-col rounded-md bg-gray-700 shadow-md">
+<div class="flex max-w-xs flex-col rounded-md bg-gray-700 shadow-md">
   <div class="relative rounded-t-md hover:bg-gray-600">
     <a
       class="absolute left-0 top-0 z-10 h-full w-full"
@@ -60,14 +60,21 @@ const { name, desc, url, techs, gitHub, documentation } = Astro.props;
         </svg>
       </IconLink>
     </li>
-    <li>
-      <IconLink href={documentation.url} text={documentation.name}>
-        <svg class="h-5 w-5 fill-white" focusable="false" aria-hidden="true" viewBox="0 0 24 24"
-          ><path
-            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
-          ></path></svg
-        >
-      </IconLink>
-    </li>
+    {
+      documentation && (
+        <li>
+          <IconLink href={documentation.url} text={documentation.name}>
+            <svg
+              class="h-5 w-5 fill-white"
+              focusable="false"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+            >
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+            </svg>
+          </IconLink>
+        </li>
+      )
+    }
   </ul>
 </div>
