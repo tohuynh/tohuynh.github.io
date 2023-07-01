@@ -12,8 +12,8 @@ const links = [
 const { currentPage } = Astro.props;
 ---
 
-<nav class="p-2">
-  <ul class="flex justify-center text-lg font-semibold">
+<nav class="mt-8 py-2">
+  <ul class="flex font-semibold">
     {
       links.map((link) => (
         <li class={`${link.href !== currentPage ? "text-zinc-400" : ""} px-1 hover:text-zinc-100`}>
