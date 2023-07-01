@@ -4,6 +4,6 @@
 
 @layer base {
   html {
-    @apply text-zinc-50 bg-gradient-to-b from-gray-950 to-slate-950
+    @apply bg-gradient-to-b from-gray-900 to-slate-950 text-zinc-50;
   }
 }
