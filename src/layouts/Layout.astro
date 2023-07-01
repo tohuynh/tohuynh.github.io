@@ -51,9 +51,9 @@ const { title, desc, currentPage } = Astro.props;
       gtag("config", "G-RPB41BXSPF");
     </script>
   </head>
-  <body class="flex min-h-screen flex-col">
+  <body class="mx-2 flex min-h-screen max-w-2xl flex-col pb-8 antialiased md:mx-4 lg:mx-auto">
     <Navigation currentPage={currentPage} />
-    <main class="flex-1">
+    <main class="mt-10 flex-1">
       <slot />
     </main>
   </body>
