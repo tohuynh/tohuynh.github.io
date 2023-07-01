@@ -1,0 +1,27 @@
+---
+export interface Props {
+  currentPage: "/" | "/projects" | "/blog";
+}
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+];
+
+const { currentPage } = Astro.props;
+---
+
+<nav class="p-2">
+  <ul class="flex justify-center text-lg font-semibold">
+    {
+      links.map((link) => (
+        <li class={`${link.href !== currentPage ? "text-zinc-400" : ""} px-1 hover:text-zinc-100`}>
+          <a class="p-1" href={link.href}>
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
