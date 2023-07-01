@@ -1,0 +1,133 @@
+---
+import ProjectCard from "../components/ProjectCard.astro";
+import Layout from "../layouts/Layout.astro";
+
+const projects = [
+  {
+    name: "Chirp",
+    desc: "A Twitter clone, but with emojis only.",
+    url: "https://chirp-tohuynh.vercel.app",
+    techs: [
+      "TypeScript",
+      "Next.js",
+      "Clerk",
+      "Upstash",
+      "Prisma",
+      "tRPC",
+      "React",
+      "Headless UI",
+      "Tailwind CSS",
+    ],
+    gitHub: {
+      name: "Chirp codebase",
+      url: "https://github.com/tohuynh/chirp",
+    },
+  },
+  {
+    name: "Tiny Mixtape",
+    desc: "Create personalized Spotify playlists",
+    url: "https://tiny-mixtape.vercel.app",
+    techs: [
+      "TypeScript",
+      "Next.js",
+      "NextAuth.js",
+      "tRPC",
+      "React",
+      "Headless UI",
+      "Tailwind CSS",
+      "dnd kit",
+      "Spotify Web API",
+    ],
+    gitHub: {
+      name: "Tiny Mixtape codebase",
+      url: "https://github.com/tohuynh/tiny-mixtape",
+    },
+  },
+  {
+    name: "AnnoREP",
+    desc: "An open-source, web-based tool that helps facilitate Annotation for Transparent Inquiry (ATI) and other annotation-based workflows.",
+    url: "https://anno-rep.org",
+    techs: [
+      "TypeScript",
+      "Next.js",
+      "NextAuth.js",
+      "React",
+      "Carbon Design System",
+      "Storybook",
+      "Jest",
+    ],
+    gitHub: {
+      name: "AnnoREP-Frontend codebase",
+      url: "https://github.com/QualitativeDataRepository/AnnoREP-Frontend",
+    },
+    documentation: {
+      name: "AnnoREP-Frontend documentation",
+      url: "https://qualitativedatarepository.github.io/AnnoREP-Frontend",
+    },
+  },
+  {
+    name: "SIGLA Database",
+    desc: "An online multilingual database that freely provides information on legal and political institutions in Latin America.",
+    url: "https://www.sigladata.org",
+    techs: [
+      "Python",
+      "Prefect",
+      "MongoDB",
+      "GitHub Actions",
+      "TypeScript",
+      "Express",
+      "React",
+      "Redux Toolkit",
+      "Ant Design",
+    ],
+    gitHub: {
+      name: "siglatools codebase",
+      url: "https://github.com/SIGLA-GU/siglatools",
+    },
+    documentation: {
+      name: "siglatools documentation",
+      url: "https://sigla-gu.github.io/siglatools",
+    },
+  },
+  {
+    name: "Council Data Project",
+    desc: "A set of open-source tools to improve the accessibility of local government data.",
+    url: "https://councildataproject.org",
+    techs: [
+      "Python",
+      "Firebase",
+      "TypeScript",
+      "Vite",
+      "React",
+      "Semantic UI React",
+      "Emotion",
+      "Storybook",
+    ],
+    gitHub: {
+      name: "cookiecutter-cdp-deployment codebase",
+      url: "https://github.com/CouncilDataProject/cookiecutter-cdp-deployment",
+    },
+    documentation: {
+      name: "Council Data Project: Software for Municipal Data Collection, Analysis, and Publication",
+      url: "https://doi.org/10.21105/joss.03904",
+    },
+  },
+];
+---
+
+<Layout title="To Huynh | Projects" desc="My Projects" currentPage="/projects">
+  <div class="py-2 lg:p-4">
+    <h1 class="flex justify-center p-4 text-3xl font-bold">Projects</h1>
+    <ul
+      class="flex flex-col items-center gap-8 lg:flex-row lg:flex-wrap lg:items-start lg:justify-center"
+    >
+      {
+        projects.map((project) => (
+          <li>
+            <ProjectCard {...project} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Layout>
