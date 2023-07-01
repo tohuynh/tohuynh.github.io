@@ -115,19 +115,15 @@ const projects = [
 ];
 ---
 
-<Layout title="To Huynh | Projects" desc="My Projects" currentPage="/projects">
-  <div class="py-2 lg:p-4">
-    <h1 class="flex justify-center p-4 text-3xl font-bold">Projects</h1>
-    <ul
-      class="flex flex-col items-center gap-8 lg:flex-row lg:flex-wrap lg:items-start lg:justify-center"
-    >
-      {
-        projects.map((project) => (
-          <li>
-            <ProjectCard {...project} />
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+<Layout title="Projects | To Huynh" desc="My Projects" currentPage="/projects">
+  <h1 class="text-3xl font-bold">Projects</h1>
+  <ul class="mt-4 flex flex-col items-center gap-8 lg:flex-row lg:flex-wrap lg:items-start">
+    {
+      projects.map((project) => (
+        <li>
+          <ProjectCard {...project} />
+        </li>
+      ))
+    }
+  </ul>
 </Layout>
