@@ -6,4 +6,43 @@
   html {
     @apply bg-gradient-to-b from-gray-900 to-slate-950 text-zinc-50;
   }
+
+  /* Markdown Styling */
+  .markdown {
+    @apply leading-relaxed;
+  }
+  .markdown h1 {
+    @apply mb-4 mt-8 text-3xl font-extrabold;
+  }
+  .markdown h2 {
+    @apply mb-4 mt-8 text-2xl font-semibold;
+  }
+  .markdown h3 {
+    @apply mb-2 mt-4 text-xl font-semibold;
+  }
+  .markdown h4 {
+    @apply mb-1 mt-2 text-base font-medium;
+  }
+  .markdown li {
+    @apply list-disc;
+  }
+  .markdown ol > li {
+    @apply mb-2 list-decimal;
+  }
+  .markdown p {
+    @apply mb-4 text-zinc-300;
+  }
+  .markdown a:not(.heading-link--hidden---effects) {
+    @apply underline decoration-zinc-500 
+          decoration-dotted underline-offset-2;
+  }
+  .markdown code {
+    @apply break-words [direction:ltr] [unicode-bidi:embed] lg:break-normal;
+  }
+  .markdown .remark-code-title {
+    @apply z-10 -mb-1 mt-3 w-full rounded-t-md border border-zinc-700/50 bg-slate-950 px-2 py-1 text-zinc-200;
+  }
+  .markdown pre {
+    @apply relative mb-3 rounded border border-zinc-700/50 !bg-slate-950 p-2;
+  }
 }
