@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@astrojs/mdx": "^0.19.7",
     "@astrojs/partytown": "^1.2.0",
     "@astrojs/tailwind": "^3.1.1",
     "astro": "^2.1.9",
@@ -24,6 +25,10 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "prettier": "^2.8.7",
     "prettier-plugin-astro": "^0.8.0",
-    "prettier-plugin-tailwindcss": "^0.2.7"
+    "prettier-plugin-tailwindcss": "^0.2.7",
+    "rehype-autolink-headings": "^6.1.1",
+    "rehype-external-links": "^2.1.0",
+    "rehype-slug": "^5.1.0",
+    "remark-code-titles": "^0.1.2"
   }
 }
