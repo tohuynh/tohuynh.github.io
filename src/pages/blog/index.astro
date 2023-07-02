@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 const allBlogs = await Astro.glob("./*.mdx");
+allBlogs.sort(
+  (a, b) => new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime()
+);
 ---
 
 <Layout title="Blog | To Huynh" desc="My Blogs" currentPage="/blog">
