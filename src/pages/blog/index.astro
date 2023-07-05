@@ -11,8 +11,20 @@ allBlogs.sort(
   <ul class="mt-6 flex flex-col gap-4">
     {
       allBlogs.map((blog) => (
-        <li class="text-zinc-300">
-          <a href={blog.url}>{blog.frontmatter.title}</a>
+        <li class="relative text-zinc-300">
+          <a
+            class="font-semibold before:absolute before:inset-0 before:content-['']"
+            href={blog.url}
+          >
+            {blog.frontmatter.title}
+          </a>
+          <time class="block text-sm text-zinc-400" datetime={blog.frontmatter.pubDate}>
+            {new Date(blog.frontmatter.pubDate).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
         </li>
       ))
     }
