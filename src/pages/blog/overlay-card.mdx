@@ -1,0 +1,62 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "Make an Entire Card Clickable with CSS"
+pubDate: 2023-07-17
+description: "Have you ever wanted to make an entire card clickable, so that clicking anywhere on the card triggers its primary action? In this tutorial, we'll show you how to do just that using TailwindCSS."
+---
+
+# Make an Entire Card Clickable with CSS
+
+Have you ever wanted to make an entire card clickable, so that clicking anywhere on the card triggers its primary action? In this tutorial, we'll show you how to do just that using TailwindCSS.
+
+## Primary Action
+
+Let's say you have a card with a title, description, and a primary action of navigating to a link, like this:
+
+```html
+<div>
+  <a>Card title</a>
+  <p>Card description</p>
+</div>
+```
+
+To make the entire card clickable, we can add an anchor or button element with a pseudo-element that overlays the entire card. Here's how it's done:
+
+```html
+<div class="relative">
+  <a class="before:absolute before:inset-0 before:content-['']">Card title</a>
+  <p>Card description</p>
+</div>
+```
+
+This creates a `::before` pseudo-element that is the first child of the anchor element. The `content-['']` property generates an empty string as the content of the pseudo-element, meaning that the pseudo-element will be generated but won't have any visible content. This is useful when you want to apply styles to the pseudo-element, such as setting its dimensions or positioning, without adding any visible content.
+
+To overlay the pseudo-element over the entire card, we'll use a combination of `relative` and `absolute` positioning. When an element is positioned `relative`, it establishes a new positioning context for its child elements. This means that any child element positioned `absolute` will be positioned relative to the nearest ancestor element with positioning applied (in this case, the parent `div` with `relative` positioning).
+
+In the card, the parent `div` is given `relative` positioning, and the `::before` pseudo-element of the child `a` element is given `absolute` positioning. This means that the pseudo-element will be positioned relative to the parent `div`.
+
+The `inset-0` utility class sets the top, right, bottom, and left properties of the pseudo-element to `0`. This means that the pseudo-element will be positioned at the top-left corner of the parent `div`, and its dimensions will be stretched to cover the entire area of the parent `div`. As a result, the pseudo-element will overlay the entire card.
+
+## Adding Non-Primary Actions
+
+If you ever need to add additional clickable actions within the card, make sure their elements have a higher `z-index` than the primary action element:
+
+```html
+<div class="relative">
+  <a class="before:absolute before:inset-0 before:content-['']">Card title</a>
+  <p>Card description</p>
+  <button class="z-10">Secondary action<button>
+</div>
+```
+
+The z-index property specifies the stack order of an element. An element with a higher `z-index` will be displayed in front of an element with a lower `z-index`.This property only works on positioned elements, meaning that the element must have a position value other than static (e.g. `relative`, `absolute`, `fixed`, or `sticky`).
+
+In the case of our clickable card, if we want to add additional clickable actions within the card, we need to make sure that their elements have a higher z-index than the primary action element. This will ensure that the additional actions are displayed in front of the primary action element and can be clicked by the user.
+
+In this example, we’ve added a button element with a class of `z-10`. This sets its `z-index` to `10`, which is higher than the default `z-index` of the primary action element (the `a` element). The `button` element is a child of the parent `div` element, which has the `relative` class. This means that the `button` element is already positioned relative to the parent `div`, so it does not need to have its own position value set. As a result, the `button` will be displayed in front of the primary action element and can be clicked by the user.
+
+## Accessibility Concerns
+
+It's important to keep accessibility in mind when designing web content. In general, using a `::before` pseudo-element to add content is discouraged, as it may not be reliably accessible to screen readers. However, in the case of our clickable card, the use of a pseudo-element is fine because the card already has content. The accessibility tree of the card remains unchanged by the addition of the pseudo-element, so screen readers will still be able to access the card's content.
+
+And there you have it! With just a few lines of CSS and some clever use of positioning and pseudo-elements, you can make an entire card clickable.
