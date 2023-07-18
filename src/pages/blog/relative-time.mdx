@@ -1,0 +1,98 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "Localized Relative Time"
+pubDate: 2023-07-18
+description: "When displaying dates in an app, it can be helpful to show them relative to the current time."
+---
+
+# Localized Relative Time
+
+When displaying dates in an app, it can be helpful to show them relative to the current time. For example, instead of showing the exact date and time a post was created, you could display it as "2 minutes ago" or "3 days ago." To achieve this, you can use the [Day.js](https://day.js.org/) library in combination with the [Number.prototype.toLocaleString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString) method. This allows you to display localized relative time in a user-friendly and easily understandable format.
+
+For instance, let's say your data has a `createdAt` property that represents the date and time when the data was created. Instead of displaying this value as an exact date and time, you can use Day.js and `toLocaleString()` to display it as a relative time, such as `2m` to signify that the data was created 2 minutes ago. This makes it easier for users to quickly understand how recent or old the data is.
+
+## Day.js
+
+Day.js is a minimalist JavaScript library that parses, validates, manipulates, and displays dates and times for modern browsers with a largely Moment.js-compatible API. It has a `fromNow` method that returns a string representing the relative time from now. For example, if you have a date object representing a time 2 minutes in the past, calling the `fromNow` method on that date object would return the string "2m".
+
+```js
+dayjs("1999-01-01").fromNow(true); // 22 years
+```
+
+One of the powerful features of Day.js is its ability to let you customize the way relative time is displayed. You can do this by providing your own `thresholds` configuration, which defines when a unit of time is considered a second, a minute, an hour, and so on.
+
+```js
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime, {
+  rounding: Math.floor,
+  thresholds: [
+    { l: "s", r: 1 },
+    { l: "ss", r: 59, d: "second" },
+    { l: "m", r: 1 },
+    { l: "mm", r: 59, d: "minute" },
+    { l: "h", r: 1 },
+    { l: "hh", r: 23, d: "hour" },
+    { l: "d", r: 1 },
+    { l: "dd", r: 29, d: "day" },
+    { l: "M", r: 1 },
+    { l: "MM", r: 11, d: "month" },
+    { l: "y", r: 1 },
+    { l: "yy", d: "year" },
+  ],
+});
+```
+
+Each object in the thresholds array has three properties: `l`, `r`, and an optional `d`. The `l` property stands for "left" and represents the unit of time being considered. The `r` property stands for "right" and represents the threshold value for that unit of time. The `d` property stands for "display" and represents the display string for that unit of time.
+
+For example, `{ l: "s", r: 1 }` means if the difference between two dates is less than or equal to 1 second, then it will be displayed as "1s". `{ l: "ss", r: 59, d: "second" }`means if the difference between two dates is greater than 1 second but less than or equal to 59 seconds, then it will be displayed as "Xs", where X is the number of seconds between the two dates.
+
+## Localization
+
+To display numbers in a format that is easily understandable by users, we can use the `toLocaleString()` method. This method returns a string representing a number in the user's default language settings.
+
+```js
+const n = 2;
+
+n.toLocaleString(undefined, { style: "unit", unit: "minute", unitDisplay: "narrow" }); //2m (in en-US)
+n.toLocaleString(undefined, { style: "unit", unit: "minute", unitDisplay: "short" }); //2 min (in en-US)
+n.toLocaleString(undefined, { style: "unit", unit: "minute", unitDisplay: "long" }); //2 minutes (in en-US)
+```
+
+In addition to customizing the `thresholds` for relative time display, Day.js also allows you to configure the actual string that is returned by the `fromNow` method. This gives you even more control over how relative time is displayed to users.
+
+```ts
+import updateLocale from "dayjs/plugin/updateLocale";
+
+type TimeUnit = "second" | "minute" | "hour" | "day" | "month" | "year";
+type TimeUnitDisplay = "narrow" | "short" | "long";
+export const localizeTimeWrapper =
+  (unit: TimeUnit, unitDisplay: TimeUnitDisplay = "narrow") =>
+  (n: number) =>
+    n.toLocaleString(undefined, { style: "unit", unit, unitDisplay });
+
+dayjs.extend(updateLocale);
+dayjs.updateLocale(dayjs.locale(), {
+  relativeTime: {
+    s: localizeTimeWrapper("second"),
+    ss: localizeTimeWrapper("second"),
+    m: localizeTimeWrapper("minute"),
+    mm: localizeTimeWrapper("minute"),
+    h: localizeTimeWrapper("hour"),
+    hh: localizeTimeWrapper("hour"),
+    d: localizeTimeWrapper("day"),
+    dd: localizeTimeWrapper("day"),
+    M: localizeTimeWrapper("month", "short"),
+    MM: localizeTimeWrapper("month", "short"),
+    y: localizeTimeWrapper("year"),
+    yy: localizeTimeWrapper("year"),
+  },
+});
+```
+
+To display localized relative time, we can define a function for each threshold object that we defined earlier. This function will accept a number as an argument and return a localized string representing that number along with its corresponding time unit.
+
+## Interval Updates
+
+To keep the relative time display up-to-date on the frontend, we can use the `setInterval` function to periodically call the `fromNow` method. For example, we could set an interval to call the `fromNow` method every second. This would update the relative time display every second, ensuring that it always shows the most accurate and up-to-date information. By using `setInterval` in this way, we can easily keep the relative time display current and accurate.
