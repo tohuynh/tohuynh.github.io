@@ -46,6 +46,6 @@
     @apply z-10 -mb-1 mt-3 w-full rounded-t-md border border-zinc-700/50 bg-slate-900 px-3 py-1 text-zinc-200;
   }
   .markdown pre {
-    @apply relative mb-3 rounded border border-zinc-700/50 !bg-slate-900 p-3;
+    @apply text-sm relative mb-3 rounded border border-zinc-700/50 !bg-slate-900 p-3;
   }
 }
