@@ -5,16 +5,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: dev
     init: true
     volumes:
       - type: bind
         source: .
         target: /usr/src/app/
       - type: volume
+        source: node_modules
         target: /usr/src/app/node_modules
     networks:
       - frontend
     ports:
       - 3000:3000
 networks:
-  frontend:  
+  frontend:
+volumes:
+  node_modules:
