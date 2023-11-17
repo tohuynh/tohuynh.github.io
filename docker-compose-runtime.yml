@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  self-astro-nginx:
+    image: self-astro-nginx
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    ports:
+      - 80:8080
+    restart: unless-stopped
