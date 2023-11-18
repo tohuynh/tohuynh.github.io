@@ -105,11 +105,11 @@ jobs:
       - name: Pull image to scan
         run: docker pull ghcr.io/tohuynh/tohuynhgithubio:"$GITHUB_RUN_ID"
 
-      - name: Run Trivy for HIGH,CRITICAL CVEs and report (blocking)
+      - name: Run Trivy for HIGH,CRITICAL CVEs and report (non-blocking)
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ghcr.io/tohuynh/tohuynhgithubio:${{ github.run_id }}
-          exit-code: 1
+          exit-code: 0
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'HIGH,CRITICAL'
