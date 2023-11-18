@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/usr/src/app/.npm \
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.24-bullseye-perl AS runtime
 COPY --link nginx.conf /etc/nginx/nginx.conf
 COPY --link --from=build usr/src/app/dist/ /usr/share/nginx/html
 EXPOSE 8080
