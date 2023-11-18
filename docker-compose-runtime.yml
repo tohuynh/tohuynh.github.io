@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  self-astro-nginx:
-    image: self-astro-nginx
+  tohuynhgithubio-nginx:
+    image: tohuynhgithubio-nginx
     build:
       context: .
       dockerfile: Dockerfile
