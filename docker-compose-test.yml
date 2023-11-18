@@ -1,5 +1,6 @@
 version: "3.9"
 services:
+# what happens if this fails? sut doesn't start, need to exit 1
   tohuynhgithubio:
     image: "${TESTING_IMAGE}"
     init: true
@@ -11,5 +12,5 @@ services:
     init: true
     depends_on:
       tohuynhgithubio:
-        condition: service_started
+        condition: service_healthy
     command: curl --fail http://tohuynhgithubio:8080 || exit 1
