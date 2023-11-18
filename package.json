@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --host",
-    "dev:docker": "docker compose -f docker-compose-dev.yml up --build",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
