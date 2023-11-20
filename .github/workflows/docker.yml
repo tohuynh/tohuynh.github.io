@@ -117,7 +117,8 @@ jobs:
           export TESTING_IMAGE=ghcr.io/tohuynh/tohuynhgithubio:"$GITHUB_RUN_ID"
           envsubst < k8s-deploy.yml | kubectl apply -f -
           kubectl rollout status deployment myapp
-          kubectl exec deploy/myapp -- curl --fail localhost:8080
+          kubectl port-forward service/myapp-service 80:8080
+          curl --fail localhost:80 || exit 1
                 
   scan-image:
     name: Scan Image with Trivy
