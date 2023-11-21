@@ -1,0 +1,68 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "Dockerizing App Development: A Guide"
+pubDate: 2023-11-16
+description: "Avoid dependency hell during development with Docker"
+---
+# Dockerizing App Development: A Guide
+
+Docker and containerization have become popular solutions to the "dependency hell" problem. By encapsulating an application and its dependencies into a self-sufficient container, Docker ensures consistency across all environments. This effectively solves the "it worked on my computer" problem. However, running an application inside a container requires modifying our usual development workflow for quick iteration and changes. In this guide, we'll use Docker's bind mount feature and hot reloading utilities to achieve this and avoid having to rebuild the container image with every single change.
+
+## Creating a Dockerfile
+Assuming we have a NodeJS application running inside a container, we first need to create a Dockerfile. This file defines the Docker image that bundles NodeJS and our source code, which is then used to build the container.
+
+```dockerfile
+# Start with a minimal NodeJS image
+FROM node:19.6-bullseye-slim AS base
+
+# Set the workdir inside the container
+WORKDIR /usr/src/app
+# Copy project's manifest to container
+COPY package*.json ./
+
+FROM base AS dev
+# Use cache mount to speed up install of existing dependencies
+RUN --mount=type=cache,target=/usr/src/app/.npm \
+  npm set cache /usr/src/app/.npm && \
+  npm ci
+# Copy source code to container
+COPY . .
+# Document that app is going to run on port 3000 inside the container
+EXPOSE 3000
+# Run the app (with hot reloading and --host flag)
+CMD ["npm", "run", "dev"]
+```
+(Note: The build and production stage from this multi-stage build are omitted for relevance)
+
+## Building and Running the Container
+To build and run the container, and access the app for development, we need to define a Docker compose YAML file.
+
+```yaml
+version: "3.9"
+services:
+  app-dev:
+    image: app-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    init: true
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src/app/
+      - type: volume
+        target: /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+```
+
+This Docker Compose file defines a service `app-dev` that builds an image from the Dockerfile in the current directory and runs it with a couple of volumes mounted and a port mapped. We targeted the dev stage of the Dockerfile with `target: dev`.
+
+We use a bind mount to link the current directory on the host machine to `/usr/src/app` (the container’s working directory). This ensures that any changes made on the host machine will be reflected in the container. Coupled with a hot reloading utility, it means any changes made will be reflected in the app running inside the container.
+
+Because the host machine's entire current directory is in the previous bind mount, we need to prevent the host machine’s `node_modules` from leaking into the container and possibly breaking isolation between our container and host machine. To do that we create an anonymous volume mount without a `source` inside the container.
+
+Finally, we map the container’s port 3000 to port 3000 on the host machine, allowing us to access the app on our host machine at `localhost:3000`.
+
+To build the container and start the app for development, use the command `docker compose -f dev.yaml up --build`.
