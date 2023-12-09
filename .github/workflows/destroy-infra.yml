@@ -1,0 +1,23 @@
+---
+name: Destroy infra
+
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy-infra:
+    name: Destroy infra
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
+    
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Deploy infra
+        run: terraform destroy -auto-approve
