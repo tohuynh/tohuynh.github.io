@@ -341,5 +341,6 @@ jobs:
         if: github.event_name == 'release' && github.event.action == 'published'
         run: |
           terraform apply \
+            -auto-approve \
             -var-file="variables.tfvars" \
             -var="container_image=${{ secrets.DOCKERHUB_USERNAME }}/tohuynhgithubio:${{ github.event.release.tag_name}}"
