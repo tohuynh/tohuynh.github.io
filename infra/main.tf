@@ -34,6 +34,16 @@ resource "aws_instance" "site_server" {
     Name = var.instance_name
   }
 
+  provisioner "file" {
+    source      = "./certs/certificate.crt"
+    destination = "~/certs/certificate.crt"
+  }
+
+  provisioner "file" {
+    source      = "./certs/privatekey.key"
+    destination = "~/certs/privatekey.key"
+  }
+
   key_name = aws_key_pair.site_ec2_key.key_name
 
   security_groups = ["site_access"]
@@ -44,7 +54,11 @@ resource "aws_instance" "site_server" {
     sudo apt-get install -y docker.io
     sudo systemctl start docker
     sudo docker pull "${var.container_image}"
-    sudo docker run -d -p 80:8080 --name my-site "${var.container_image}"
+    sudo docker run -d \
+      -p 80:8080 -p 443:443 \
+      -v ./certs:/etc/nginx/certs \
+      --name my-site \
+      "${var.container_image}"
     EOF
 }
 

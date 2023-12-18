@@ -34,7 +34,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Build and Push to GHCR
         uses: docker/build-push-action@v5
         with:
@@ -69,6 +69,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create SSL Certificate files
+        run: |
+          mkdir certs
+          echo ${{ secrets.SSL_CERTIFICATE }} > ./certs/certificate.crt
+          echo ${{ secrets.SSL_CERTIFICATE_PRIVATE_KEY }} > ./certs/privatekey.key
 
       - name: Test healthcheck in Docker Compose
         run: |
@@ -262,6 +268,11 @@ jobs:
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v4
+      - name: Create SSL Certificate files
+        run: |
+          mkdir certs
+          echo ${{ secrets.SSL_CERTIFICATE }} > ./certs/certificate.crt
+          echo ${{ secrets.SSL_CERTIFICATE_PRIVATE_KEY }} > ./certs/privatekey.key
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
