@@ -1,0 +1,205 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "AWS VPC Peering"
+pubDate: 2024-02-14
+description: "AWS VPC Peering"
+---
+
+# VPC Peering (using Terraform)
+
+Virtual Private Cloud(VPC) peering is a networking feature that allows you to connect two or more VPCs in the same or different region within a cloud service provider's infrastructure. The exchange of traffic between the VPCs stays within the cloud provider network. The benefit of VPC peering is improved security by maintaining isolation between resources of each VPC while enabling controlled communication between them. A typical use case is when you have a multi-tier application (web applications, microservices, databases) and you want to separate them into different VPCs for enhance security and easier management. In this post, we'll created an EC2 instance in two separate VPCs and bridge them using only their private IPs.
+
+## VPCs and Subnets
+
+We'll start with defining our two VPCs and subnets where our instances will reside.
+
+```hcl
+resource "aws_vpc" "vpc1" {
+  cidr_block = "10.0.0.0/17"
+
+  tags = {
+    Name = "VPC1"
+  }
+}
+
+resource "aws_vpc" "vpc2" {
+  cidr_block = "10.1.0.0/17"
+
+  tags = {
+    Name = "VPC2"
+  }
+}
+
+resource "aws_subnet" "subnet1" {
+  vpc_id            = aws_vpc.vpc1.id
+  cidr_block        = "10.0.0.0/24"
+  availability_zone = "us-east-1a"
+  # create public IP for instances in VPC1 to allow SSH access
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "subnet2" {
+  vpc_id                  = aws_vpc.vpc2.id
+  cidr_block              = "10.1.0.0/24"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = false
+}
+```
+
+Note the non-overlapping CIDR block of the two VPCs (more on this later). A CIDR block specify the IP range for resources provisioned in a VPC.
+
+## VPC Peering
+
+To allow for the exchange of traffic, create a VPC peering connection between the two VPCs.
+
+```hcl
+resource "aws_vpc_peering_connection" "peer_connection" {
+  peer_vpc_id = aws_vpc.vpc2.id
+  vpc_id      = aws_vpc.vpc1.id
+  auto_accept = true
+}
+```
+
+Then route traffic between the VPCs with a route table. In each route table, route traffic destined for the other VPC to the peering connection.
+
+Route traffic destined for VPC2 from VPC1.
+
+```hcl
+resource "aws_internet_gateway" "vpc1" {
+  vpc_id = aws_vpc.vpc1.id
+}
+
+resource "aws_route_table" "vpc1" {
+  vpc_id = aws_vpc.vpc1.id
+
+  # facilitate communication between VPC1 and the internet
+  # for ssh access
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.vpc1.id
+  }
+
+  # route to vpc2
+  route {
+    cidr_block                = aws_vpc.vpc2.cidr_block
+    vpc_peering_connection_id = aws_vpc_peering_connection.peer_connection.id
+  }
+}
+
+resource "aws_route_table_association" "vpc1" {
+  subnet_id      = aws_subnet.vpc1.id
+  route_table_id = aws_route_table.vpc1.id
+}
+```
+
+Route traffic destined for VPC1 from VPC2.
+
+```hcl
+resource "aws_route_table" "vpc2" {
+  vpc_id = aws_vpc.vpc2.id
+
+  # route to vpc1
+  route {
+    cidr_block                = aws_vpc.vpc1.cidr_block
+    vpc_peering_connection_id = aws_vpc_peering_connection.peer_connection.id
+  }
+}
+
+resource "aws_route_table_association" "vpc2" {
+  subnet_id      = aws_subnet.subnet2.id
+  route_table_id = aws_route_table.vpc2.id
+}
+```
+
+Within each route table, there is an additional route called the local gateway route that covers the entire CIDR block of the VPC, routing traffic between resources within the VPC. 
+
+```hcl
+# VPC1's route table
+route {
+  cidr_block = aws_vpc.vpc1.cidr_block
+  gateway_id = "local"
+}
+
+route {
+  cidr_block                = aws_vpc.vpc2.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer_connection.id
+}
+```
+
+For this reason, it's important that two VPCs have non-overlapping CIDR blocks in order to avoid routing conflicts. In this example, if there is an overlap between VPC1's CIDR block and VPC2's CIDR block, the two defined routes are in conflict.
+
+## Instances and Security Groups
+
+Create an EC2 instance in each VPC.
+
+```hcl
+resource "aws_instance" "vm_subnet1" {
+  ami                    = "ami-0ff8a91507f77f867"
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.vpc1.id
+  vpc_security_group_ids = [aws_security_group.vpc1.id]
+  key_name               = aws_key_pair.ec2_key.key_name
+}
+
+resource "aws_instance" "vm_subnet2" {
+  ami                    = "ami-0ff8a91507f77f867"
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.vpc2.id
+  vpc_security_group_ids = [aws_security_group.vpc2.id]
+}
+
+resource "aws_key_pair" "ec2_key" {
+  key_name   = "ec2_key"
+  public_key = file("~/.ssh/ec2-key-pair.pub")
+}
+```
+
+Now, allow traffic between the instances with two security groups. `vm_subnet1` will be able to ping `vm_subnet2`'s private IP.
+
+```hcl
+resource "aws_security_group" "vpc1" {
+  name   = "vpc1-access"
+  vpc_id = aws_vpc.vpc1.id
+
+  # for ssh access
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # to ping vpc2's instances
+  egress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [aws_vpc.vpc2.cidr_block]
+  }
+}
+
+resource "aws_security_group" "vpc2" {
+  name   = "vpc2-access"
+  vpc_id = aws_vpc.vpc2.id
+
+  # accept ping request from vpc1's instances
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [aws_vpc.vpc1.cidr_block]
+  }
+}
+```
+
+## Test the peering connection
+
+SSH into `vm_subnet1` and ping `vm_subnet2`'s private IP.
+
+You can retrieve its private IP if you defined an output.
+
+```hcl
+output "vm_subnet2_private_ip" {
+  value = aws_instance.vm_subnet2.private_ip
+}
+```
