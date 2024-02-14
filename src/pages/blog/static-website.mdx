@@ -1,0 +1,135 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "Delivering Web Content to a Global Audience"
+pubDate: 2024-02-15
+description: "Use AWS CloudFront and S3 bucket to deliver web content to a global audience"
+---
+
+# Delivering Web Content to a Global Audience (with Terraform)
+
+Amazon CloudFront helps speed up the delivery of your website's static and dynamic content, like HTML, CSS, JS, and images, to users worldwide. It does this by using a network of data centers called edge locations. When someone requests content from your website, CloudFront sends it from the edge location with the quickest response time, ensuring the content is delivered as fast as possible.
+
+If the content is already in that edge location's cache, CloudFront delivers it right away. If not, it fetches the content from a source you've specified, like an Amazon S3 bucket or an HTTP server, save it in its cache for future requests, and then delivers it to the user.
+
+In this post, we'll use Terraform to provision a CloudFront distribution to serve static web content and an S3 bucket to act as the central storage of your web content.
+
+### S3 Bucket
+
+Create a S3 bucket to store your static website's files (HTML, CSS, JavaScript files, media files, etc).
+
+```hcl
+resource "aws_s3_bucket" "website" {
+  bucket        = "my-website"
+  force_destroy = true
+}
+```
+
+S3 buckets are private by default. Create S3 bucket policy that allows only CloudFront to retrieve objects from the bucket.
+
+```hcl
+resource "aws_s3_bucket_policy" "allow_access_from_cdn" {
+  bucket = aws_s3_bucket.website.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        "Sid" : "AllowCloudFrontServicePrincipalReadOnly",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "cloudfront.amazonaws.com"
+        },
+        "Action" : "s3:GetObject",
+        "Resource" : "${aws_s3_bucket.website.arn}/*"
+        "Condition" : {
+          "StringEquals" : {
+            "AWS:SourceArn" : "${aws_cloudfront_distribution.cdn.arn}"
+          }
+        }
+      }
+    ]
+  })
+}
+```
+## CloudFront Distribution
+
+Now create a CloudFront distribution with the S3 bucket as the origin server.
+
+```hcl
+resource "aws_cloudfront_distribution" "cdn" {
+  origin {
+    domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.auth_origin_request.id
+    origin_id                = local.s3_origin_id
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = local.s3_origin_id
+
+    viewer_protocol_policy   = "redirect-to-https"
+    # specify the expiry time of cached web content
+    min_ttl                  = 0
+    default_ttl              = 3600
+    max_ttl                  = 86400
+  }
+
+  ordered_cache_behavior {
+    # use `path_pattern` to add more refined caching behaviors for different types of web content
+    # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#path_pattern
+  }
+
+  price_class = "PriceClass_100"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
+
+locals {
+  s3_origin_id = "s3WebsiteOrigin"
+}
+```
+
+Create an Origin Access Control to allow CloudFront to send authenticated requests to retrieve objects from the S3 bucket origin.
+
+```hcl
+resource "aws_cloudfront_origin_access_control" "auth_origin_request" {
+  name                              = "${aws_s3_bucket.website.id}-oac"
+  description                       = "Authenticate origin request to S3"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+```
+
+## Deploy the website
+
+After you've provisioned these resources and built HTML, CSS, JavaScript files into a `dist` dir, push them to the S3 bucket with the AWS CLI:
+
+```bash
+aws s3 sync ./dist/ s3://my-website --delete
+```
+
+Visit your website by visiting the domain name of the CloudFront distribution. Use Terraform outputs to retrieve the domain name:
+
+```hcl
+output "cdn_domain_name" {
+  description = "Domain name of CDN"
+  value       = aws_cloudfront_distribution.cdn.domain_name
+}
+```
+
+## Further Consideration
+
+If you are concerned about the latency of origin requests caused by the potential substantial physical distance between an edge location and your S3 bucket, consider replicating your S3 bucket across multiple regions. This strategic move not only mitigates latency issues but also ensures a better distribution of the workload across multiple S3 buckets.
